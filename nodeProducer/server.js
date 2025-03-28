@@ -7,10 +7,10 @@ app.use(express.static('public'));
 
 const rabbitSettings = {
     protocol: 'amqp',
-    hostname: 'rabbitmq',
-    port: 5672,
-    username: 'guest',
-    password: 'guest',
+    hostname: process.env.RABBITMQ_HOST,
+    port: process.env.RABBITMQ_PORT,
+    username: process.env.RABBITMQ_USER,
+    password: process.env.RABBITMQ_PASSWORD,
     vhost: '/',
     authMechanism: ['PLAIN', 'AMQPLAIN', 'EXTERNAL']
 }
@@ -22,11 +22,11 @@ async function sendMessage(message) {
         const connection = await amqp.connect(rabbitSettings);
         const channel = await connection.createChannel();
 
-        await channel.assertExchange(exchange, 'fanout', {durable: true})
+        await channel.assertExchange(exchange, 'fanout', { durable: true })
         await channel.assertQueue(queue, { durable: false });
 
-        channel.sendToQueue(queue, Buffer.from(JSON.stringify({producer: 'Node producer', message: message })));
-        channel.publish(exchange, '', Buffer.from(JSON.stringify({producer: 'Node producer', message: message})));
+        //channel.sendToQueue(queue, Buffer.from(JSON.stringify({producer: 'Node producer', message: message })));
+        channel.publish(exchange, '', Buffer.from(JSON.stringify({ producer: 'Node producer', message: message })));
         console.log(`Mensaje enviado: ${message}`);
 
         await channel.close();

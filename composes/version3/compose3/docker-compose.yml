@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  consumer: 
+    build: ../../nodeConsumer
+    container_name: consumer
+    ports: 
+      - "3001:3001"
+    networks:
+      - rabbitmq_network
+    environment:
+      - RABBITMQ_HOST=10.6.101.99
+
+  java-consumer:
+    build: ../../Javaconsumer
+    container_name: java-consumer
+    ports:
+      - "8080:8080"
+    networks:
+      - rabbitmq_network
+    environment:
+      - JAVA_RABBITMQ_HOST=10.6.101.99
+      
+networks:
+  rabbitmq_network:
+    driver: bridge

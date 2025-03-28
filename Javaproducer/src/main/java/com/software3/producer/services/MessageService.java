@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageService {
 
-    private static final String EXCHANGE_NAME = "message.exchange";
+    private static final String EXCHANGE_NAME = "miFanoutExchange";
     private static final String ROUTING_KEY = "message.key";
 
     @Autowired
@@ -16,7 +16,7 @@ public class MessageService {
 
     public void sendMessage(Message message) {
         System.out.println("Message have been sent: " + message);
-        rabbitTemplate.convertAndSend(EXCHANGE_NAME, ROUTING_KEY, message);
+        rabbitTemplate.convertAndSend(EXCHANGE_NAME, "", message);
     }
 
 }

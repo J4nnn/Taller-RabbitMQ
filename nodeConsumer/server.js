@@ -6,27 +6,28 @@ app.use(express.static('public'));
 
 const rabbitSettings = {
     protocol: 'amqp',
-    hostname: 'rabbitmq',
-    port: 5672,
-    username: 'guest',
-    password: 'guest',
+    hostname: process.env.RABBITMQ_HOST,
+    port: process.env.RABBITMQ_PORT,
+    username: process.env.RABBITMQ_USER,
+    password: process.env.RABBITMQ_PASSWORD,
     vhost: '/',
     authMechanism: ['PLAIN', 'AMQPLAIN', 'EXTERNAL']
 }
 
-const queue = 'messages';
 let messages = [];
 
 async function consumeMessages() {
-    const connection = await amqp.connect(rabbitSettings);
+    const queue = 'messages';
     const exchange = 'miFanoutExchange';
+
+    const connection = await amqp.connect(rabbitSettings);
     const channel = await connection.createChannel();
 
-    await channel.assertExchange(exchange, 'fanout', {durable: true});
-    await channel.assertExchange(queue);
+    await channel.assertExchange(exchange, 'fanout', { durable: true });
+    const q = await channel.assertQueue(queue, {durable: false});
 
-    await channel.bindQueue(queue, exchange, '');
-    
+    await channel.bindQueue(q.queue, exchange, '');
+
     channel.consume(queue, msg => {
         if (msg) {
             const receivedMessage = JSON.parse(msg.content.toString());
