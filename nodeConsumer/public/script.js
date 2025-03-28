@@ -6,7 +6,7 @@ async function fetchMessages() {
     list.innerHTML = '';
     messages.forEach(msg => {
         const li = document.createElement('li');
-        li.textContent = msg.text;
+        li.textContent = `${msg.producer}: ${msg.message}`;
         list.appendChild(li);
     });
 }

@@ -15,7 +15,7 @@ FROM eclipse-temurin:17
 #EL nombre del jar generado es el artifactId junto con la version, separado con un guion
 COPY --from=maven /usr/local/app/target/producer-0.0.1.jar /usr/share/app.jar
 
-ENV JAVA_RABBITMQ_HOST=my-rabbitmq
+ENV JAVA_RABBITMQ_HOST=rabbitmq
 ENV JAVA_RABBITMQ_PORT=5672
 ENV JAVA_RABBITMQ_USERNAME=guest
 ENV JAVA_RABBITMQ_PASSWORD=guest

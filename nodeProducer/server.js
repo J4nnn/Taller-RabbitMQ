@@ -18,11 +18,15 @@ const rabbitSettings = {
 async function sendMessage(message) {
     try {
         const queue = 'messages';
+        const exchange = 'miFanoutExchange'
         const connection = await amqp.connect(rabbitSettings);
         const channel = await connection.createChannel();
+
+        await channel.assertExchange(exchange, 'fanout', {durable: true})
         await channel.assertQueue(queue, { durable: false });
 
-        channel.sendToQueue(queue, Buffer.from(JSON.stringify({ text: message })));
+        channel.sendToQueue(queue, Buffer.from(JSON.stringify({producer: 'Node producer', message: message })));
+        channel.publish(exchange, '', Buffer.from(JSON.stringify({producer: 'Node producer', message: message})));
         console.log(`Mensaje enviado: ${message}`);
 
         await channel.close();
@@ -41,7 +45,7 @@ app.post('/send', async (req, res) => {
             return res.status(400).send({ error: 'El campo "text" es obligatorio' });
         }
 
-        await sendMessage(`Node Producer: ${text}`);
+        await sendMessage(text);
         res.send({ status: 'Message sent' });
     } catch (error) {
         console.error("Error en /send:", error);

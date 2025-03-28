@@ -19,8 +19,13 @@ let messages = [];
 
 async function consumeMessages() {
     const connection = await amqp.connect(rabbitSettings);
+    const exchange = 'miFanoutExchange';
     const channel = await connection.createChannel();
+
+    await channel.assertExchange(exchange, 'fanout', {durable: true});
     await channel.assertExchange(queue);
+
+    await channel.bindQueue(queue, exchange, '');
     
     channel.consume(queue, msg => {
         if (msg) {

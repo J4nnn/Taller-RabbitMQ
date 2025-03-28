@@ -14,7 +14,7 @@ FROM eclipse-temurin:17
 
 COPY --from=maven /usr/local/app/target/software3-taller1-consumer-0.0.1.jar /usr/share/app.jar
 
-ENV JAVA_RABBITMQ_HOST=my-rabbitmq
+ENV JAVA_RABBITMQ_HOST=rabbitmq
 ENV JAVA_RABBITMQ_PORT=5672
 ENV JAVA_RABBITMQ_USERNAME=guest
 ENV JAVA_RABBITMQ_PASSWORD=guest

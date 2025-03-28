@@ -27,7 +27,27 @@ services:
     depends_on: 
       - rabbitmq
     networks:
-      - rabbitmq_network  
+      - rabbitmq_network
+
+  java-consumer:
+    build: ./Javaconsumer
+    container_name: java-consumer
+    ports:
+      - "8080:8080"
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_network
+
+  java-producer:
+    build: ./Javaproducer
+    container_name: java-producer
+    ports:
+      - "8081:8081"
+    depends_on:
+      - rabbitmq
+    networks:
+      - rabbitmq_network
       
 networks:
   rabbitmq_network:
