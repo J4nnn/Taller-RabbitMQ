@@ -7,6 +7,11 @@ Este taller tiene como objetivo desplegar la actividad de **publish/subscribe** 
 
 ---
 
+## Video
+Se puede ver el video [aquí](https://youtu.be/hIbcy_wenq8)
+
+---
+
 ## Participantes
 
 - **Mauricio Marin - 2215634**
