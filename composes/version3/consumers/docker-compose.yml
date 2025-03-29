@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   consumer: 
-    build: ../../nodeConsumer
+    build: ../../../nodeConsumer
     container_name: consumer
     ports: 
       - "3001:3001"
@@ -11,7 +11,7 @@ services:
       - RABBITMQ_HOST=10.6.101.99
 
   java-consumer:
-    build: ../../Javaconsumer
+    build: ../../../Javaconsumer
     container_name: java-consumer
     ports:
       - "8080:8080"

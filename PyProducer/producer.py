@@ -7,9 +7,9 @@ from pydantic import BaseModel
 # Reading RabbitMQ and FastAPI settings from environment variables
 RABBITMQ_USER = os.getenv("RABBITMQ_USER", "guest")
 RABBITMQ_PASSWORD = os.getenv("RABBITMQ_PASSWORD", "guest")
-RABBITMQ_EXCHANGE = os.getenv("RABBITMQ_EXCHANGE", 'exchange')
+RABBITMQ_EXCHANGE = os.getenv("RABBITMQ_EXCHANGE", 'miFanoutExchange')
 RABBITMQ_QUEUE = os.getenv("RABBITMQ_QUEUE", 'pyqueue')
-RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "localhost")
+RABBITMQ_HOST = os.getenv("RABBITMQ_HOST", "rabbitmq")
 RABBITMQ_PORT = int(os.getenv("RABBITMQ_PORT", 5672))
 FASTAPI_PORT = int(os.getenv("FASTAPI_PORT", 8001))
 
@@ -26,6 +26,8 @@ def connect_to_rabbitmq():
         # Establishing connection to RabbitMQ
         connection = pika.BlockingConnection(parameters)
         channel = connection.channel()
+        channel.queue_declare(queue=RABBITMQ_QUEUE, durable=True)
+
         print("RabbitMQ connection established")
         return connection, channel
     except Exception as error:
@@ -39,7 +41,7 @@ def publish_message(channel, message):
         # Publishing the message to the specified exchange and queue
         channel.basic_publish(
             exchange=RABBITMQ_EXCHANGE,
-            routing_key=RABBITMQ_QUEUE,
+            routing_key="",
             body=message,
             properties=pika.BasicProperties(delivery_mode=2)  # Making the message persistent
         )

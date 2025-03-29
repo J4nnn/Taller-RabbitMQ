@@ -10,7 +10,7 @@ services:
       - rabbitmq_network 
 
   producer:
-    build: ./nodeProducer
+    build: ../../nodeProducer
     container_name: producer
     ports: 
       - "3000:3000"
@@ -20,7 +20,7 @@ services:
       - rabbitmq_network 
 
   consumer: 
-    build: ./nodeConsumer
+    build: ../../nodeConsumer
     container_name: consumer
     ports: 
       - "3001:3001"
@@ -30,7 +30,7 @@ services:
       - rabbitmq_network
 
   java-consumer:
-    build: ./Javaconsumer
+    build: ../../Javaconsumer
     container_name: java-consumer
     ports:
       - "8080:8080"
@@ -40,7 +40,7 @@ services:
       - rabbitmq_network
 
   java-producer:
-    build: ./Javaproducer
+    build: ../../Javaproducer
     container_name: java-producer
     ports:
       - "8081:8081"
